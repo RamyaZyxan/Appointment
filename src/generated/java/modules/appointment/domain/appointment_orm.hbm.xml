@@ -1,0 +1,95 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping default-access="field">
+
+	<typedef name="OptimisticLock" class="org.skyve.impl.domain.types.OptimisticLockUserType" />
+	<typedef name="Decimal2" class="org.skyve.impl.domain.types.Decimal2UserType" />
+	<typedef name="Decimal5" class="org.skyve.impl.domain.types.Decimal5UserType" />
+	<typedef name="Decimal10" class="org.skyve.impl.domain.types.Decimal10UserType" />
+	<typedef name="DateOnly" class="org.skyve.impl.domain.types.DateOnlyUserType" />
+	<typedef name="DateTime" class="org.skyve.impl.domain.types.DateTimeUserType" />
+	<typedef name="TimeOnly" class="org.skyve.impl.domain.types.TimeOnlyUserType" />
+	<typedef name="Timestamp" class="org.skyve.impl.domain.types.TimestampUserType" />
+	<typedef name="Enum" class="org.skyve.impl.domain.types.EnumUserType" />
+	<class name="modules.appointment.domain.Appointment" table="APT_Appointment" entity-name="appointmentAppointment">
+		<id name="bizId" length="36" />
+		<version name="bizVersion" unsaved-value="null" />
+		<property name="bizLock" type="OptimisticLock" length="271" not-null="true" />
+		<property name="bizKey" length="1024" index="IDX_bizKey" not-null="true" />
+		<property name="bizCustomer" length="50" not-null="true" />
+		<property name="bizFlagComment" length="1024" />
+		<property name="bizDataGroupId" length="36" />
+		<property name="bizUserId" length="36" index="IDX_bizUserId" not-null="true" />
+		<property name="title" length="100" />
+		<property name="appointmentDate" type="DateOnly" />
+		<property name="branch" length="10">
+			<type name="Enum">
+				<param name="enumClass">modules.appointment.domain.Appointment$Branch</param>
+			</type>
+		</property>
+		<property name="department" length="6">
+			<type name="Enum">
+				<param name="enumClass">modules.appointment.domain.Appointment$Department</param>
+			</type>
+		</property>
+		<property name="unit" length="6">
+			<type name="Enum">
+				<param name="enumClass">modules.appointment.domain.Appointment$Unit</param>
+			</type>
+		</property>
+		<property name="status" length="9">
+			<type name="Enum">
+				<param name="enumClass">modules.appointment.domain.Appointment$Status</param>
+			</type>
+		</property>
+		<many-to-one name="doctors" entity-name="appointmentDoctors" column="doctors_id" cascade="persist,save-update,refresh,merge" index="IDX_doctors" foreign-key="FK_APT_Appointment_doctors"/>
+		<filter name="appointmentAppointmentNoneFilter" condition="1=0"/>
+		<filter name="appointmentAppointmentCustomerFilter" condition="bizCustomer=:customerParam"/>
+		<filter name="appointmentAppointmentDataGroupIdFilter" condition="bizDataGroupId=:dataGroupIdParam"/>
+		<filter name="appointmentAppointmentUserIdFilter" condition="bizUserId=:userIdParam"/>
+	</class>
+
+	<class name="modules.appointment.domain.Doctors" table="APT_Doctors" entity-name="appointmentDoctors">
+		<id name="bizId" length="36" />
+		<version name="bizVersion" unsaved-value="null" />
+		<property name="bizLock" type="OptimisticLock" length="271" not-null="true" />
+		<property name="bizKey" length="1024" index="IDX_bizKey" not-null="true" />
+		<property name="bizCustomer" length="50" not-null="true" />
+		<property name="bizFlagComment" length="1024" />
+		<property name="bizDataGroupId" length="36" />
+		<property name="bizUserId" length="36" index="IDX_bizUserId" not-null="true" />
+		<property name="name" length="100" />
+		<property name="gender" length="6">
+			<type name="Enum">
+				<param name="enumClass">modules.appointment.domain.Doctors$Gender</param>
+			</type>
+		</property>
+		<property name="startTime" type="TimeOnly" />
+		<property name="endTime" type="TimeOnly" />
+		<filter name="appointmentDoctorsNoneFilter" condition="1=0"/>
+		<filter name="appointmentDoctorsCustomerFilter" condition="bizCustomer=:customerParam"/>
+		<filter name="appointmentDoctorsDataGroupIdFilter" condition="bizDataGroupId=:dataGroupIdParam"/>
+		<filter name="appointmentDoctorsUserIdFilter" condition="bizUserId=:userIdParam"/>
+	</class>
+
+	<filter-def name="appointmentAppointmentNoneFilter" />
+	<filter-def name="appointmentAppointmentCustomerFilter">
+		<filter-param name="customerParam" type="string"/>
+	</filter-def>
+	<filter-def name="appointmentAppointmentDataGroupIdFilter">
+		<filter-param name="dataGroupIdParam" type="string"/>
+	</filter-def>
+	<filter-def name="appointmentAppointmentUserIdFilter">
+		<filter-param name="userIdParam" type="string"/>
+	</filter-def>
+	<filter-def name="appointmentDoctorsNoneFilter" />
+	<filter-def name="appointmentDoctorsCustomerFilter">
+		<filter-param name="customerParam" type="string"/>
+	</filter-def>
+	<filter-def name="appointmentDoctorsDataGroupIdFilter">
+		<filter-param name="dataGroupIdParam" type="string"/>
+	</filter-def>
+	<filter-def name="appointmentDoctorsUserIdFilter">
+		<filter-param name="userIdParam" type="string"/>
+	</filter-def>
+</hibernate-mapping>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<document name="Appointment"
+	xmlns="http://www.skyve.org/xml/document"
+	xsi:schemaLocation="http://www.skyve.org/xml/document ../../../schemas/document.xsd"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<persistent name="APT_Appointment" />
+	<singularAlias>Appointment</singularAlias>
+	<pluralAlias>Appointments</pluralAlias>
+	<bizKey expression="{title}" />
+	<attributes>
+		<text name="title">
+			<displayName>Title</displayName>
+			<description>The title of the appointment.</description>
+			<length>100</length>
+		</text>
+		<date name="appointmentDate" required="true">
+			<displayName>Appointment Date</displayName>
+			<defaultValue>{DATE}</defaultValue>
+		</date>
+		<enum name="branch">
+			<displayName>Branch</displayName>
+			<values>
+				<value code="KPHB" />
+				<value code="Kukatpally" />
+			</values>
+		</enum>
+		<enum name="department">
+			<displayName>Department</displayName>
+			<values>
+				<value code="Dental" />
+				<value code="ENT" />
+			</values>
+		</enum>
+		<enum name="unit">
+			<displayName>Unit</displayName>
+			<values>
+				<value code="Dental" />
+				<value code="ENT" />
+			</values>
+		</enum>
+		<enum name="status">
+			<displayName>Status</displayName>
+			<values>
+				<value code="Available" />
+				<value code="Booked" />
+			</values>
+		</enum>
+		<association type="aggregation" name="doctors">
+			<displayName>Doctor</displayName>
+			<documentName>Doctors</documentName>
+		</association>
+	</attributes>
+</document>

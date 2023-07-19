@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<document name="Doctors"
+	xmlns="http://www.skyve.org/xml/document"
+	xsi:schemaLocation="http://www.skyve.org/xml/document ../../../schemas/document.xsd"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<persistent name="APT_Doctors" />
+	<singularAlias>Doctors</singularAlias>
+	<pluralAlias>Doctors</pluralAlias>
+	<bizKey expression="{name}" />
+	<attributes>
+		<text name="name" required="true">
+			<displayName>Name</displayName>
+			<length>100</length>
+		</text>
+		<enum name="gender">
+			<displayName>Gender</displayName>
+			<values>
+				<value code="Male" />
+				<value code="Female" />
+			</values>
+		</enum>
+		<time name="startTime">
+			<displayName>Start Time</displayName>
+		</time>
+		<time name="endTime">
+			<displayName>End Time</displayName>
+		</time>
+	</attributes>
+</document>

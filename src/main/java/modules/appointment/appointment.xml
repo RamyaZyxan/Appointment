@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<module name="appointment" title="Appointments"
+	xmlns="http://www.skyve.org/xml/module"
+	xsi:schemaLocation="http://www.skyve.org/xml/module ../../schemas/module.xsd"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<homeDocument>Appointment</homeDocument>
+	<documents>
+		<document ref="Appointment" />
+		<document ref="Doctors" />
+	</documents>
+	<roles>
+		<role name="AppointmentManager">
+			<description>This role manages the Appointments</description>
+			<privileges>
+				<document name="Appointment" permission="CRUDC" />
+				<document name="Doctors" permission="CRUDC" />
+			</privileges>
+		</role>
+	</roles>
+	<menu>
+		<list name="Appointments" document="Appointment"> <!-- name could be anything we want to display -->
+			<role name="AppointmentManager" />
+		</list>
+		<list name="Doctors" document="Doctors"> <!-- name could be anything we want to display -->
+			<role name="AppointmentManager" />
+		</list>
+	</menu>
+</module>
