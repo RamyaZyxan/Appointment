@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view xmlns="http://www.skyve.org/xml/view"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="edit"
+	title="Appointment"
+	xsi:schemaLocation="http://www.skyve.org/xml/view ../../../../schemas/view.xsd">
+	<hbox shrinkWrap="height">
+		<vbox>
+			<form responsiveWidth="12" border="false"
+				widgetId="formLocation">
+				<column responsiveWidth="4" />
+				<column />
+				<row>
+					<item>
+						<default binding="branch" />
+					</item>
+					<item>
+						<default binding="department" />
+					</item>
+				</row>
+				<row>
+					<item>
+						<default binding="unit" />
+					</item>
+					<item>
+						<default binding="doctors" />
+					</item>
+				</row>
+			</form>
+		</vbox>
+	</hbox>
+	<actions widgetId="selectManyActions">
+		<defaults />
+	</actions>
+	<newParameters />
+</view>
