@@ -10,7 +10,7 @@
 				<column responsiveWidth="4" />
 				<column />
 				<row>
-					<item>
+					<item>			
 						<default binding="branch" />
 					</item>
 					<item>
