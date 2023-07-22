@@ -1,7 +1,10 @@
 package faces;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import org.skyve.util.Util;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -10,12 +13,12 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import org.primefaces.event.ScheduleEntryMoveEvent;
 import org.primefaces.event.ScheduleEntryResizeEvent;
 import org.primefaces.event.*;
 import org.primefaces.model.*;
+import org.skyve.util.Time;
 import org.skyve.impl.web.faces.beans.FacesView;
 
 import modules.appointment.Appointment.AppointmentService;
@@ -31,6 +34,7 @@ public class ScheduleView extends FacesView<modules.appointment.domain.Appointme
 	private static final long serialVersionUID = 5885014553965371209L;
 
 	private ScheduleModel lazyEventModel;
+	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm-HH:mm");
 	private ScheduleModel eventModel;
 	private ScheduleEvent<?> event = new DefaultScheduleEvent<>();
 	private String rightHeaderTemplate = "dayGridMonth,timeGridWeek,timeGridDay,listYear";
@@ -40,11 +44,11 @@ public class ScheduleView extends FacesView<modules.appointment.domain.Appointme
 
 	@Inject
 	private transient AppointmentService appointmentService;
+
 	@PostConstruct
 	public void init() {
 
 		eventModel = new DefaultScheduleModel();
-		addEvents2EventModel(LocalDateTime.now());
 		lazyEventModel = new LazyScheduleModel() {
 
 			/**
@@ -54,30 +58,21 @@ public class ScheduleView extends FacesView<modules.appointment.domain.Appointme
 
 			@Override
 			public void loadEvents(LocalDateTime start, LocalDateTime end) {
+				// load appointments from the database
+				List<Appointment> appointments = appointmentService.getAllAppointments();
+				for (Appointment appt : appointments) {
 
-				List<Appointment> appointments  = appointmentService.getAllAppointments();
-				for (int i = 1; i <= 5; i++) {
-					LocalDateTime random = getRandomDateTime(start);
-					addEvent(DefaultScheduleEvent.builder().title("Lazy Event" + i).startDate(random)
-							.endDate(random.plusHours(3)).build());
+					LocalDateTime startDateTime = LocalDateTime.of(Time.asLocalDate(appt.getAppointmentDate()),
+							LocalTime.parse(appt.getStartTime()));
+					LocalDateTime endDateTime = LocalDateTime.of(Time.asLocalDate(appt.getAppointmentDate()),
+							LocalTime.parse(appt.getEndTime()));
+
+					addEvent(DefaultScheduleEvent.builder().title(appt.getTitle()).startDate(startDateTime)
+							.endDate(endDateTime).data(appt.getBizId()) // the bizId of the Skyve record
+							.build());
 				}
 			}
 		};
-
-	}
-
-	private void addEvents2EventModel(LocalDateTime referenceDate) {
-		event = DefaultScheduleEvent.builder().title("Birthday Party").startDate(today1Pm(referenceDate))
-				.endDate(today6Pm(referenceDate)).build();
-		eventModel.addEvent(event);
-	}
-
-	private LocalDateTime today1Pm(LocalDateTime referenceDate) {
-		return referenceDate.withHour(13).withMinute(0).withSecond(0).withNano(0);
-	}
-
-	private LocalDateTime today6Pm(LocalDateTime referenceDate) {
-		return referenceDate.withHour(18).withMinute(0).withSecond(0).withNano(0);
 	}
 
 	public LocalDateTime getRandomDateTime(LocalDateTime base) {
@@ -128,12 +123,16 @@ public class ScheduleView extends FacesView<modules.appointment.domain.Appointme
 	public void addEvent() {
 
 		if (event.getId() == null) {
-
-			eventModel.addEvent(event);
+			Appointment newAppt = appointmentService.createAppointment(event.getStartDate(), event.getEndDate(),
+					event.getTitle());
+			DefaultScheduleEvent newEvent = (DefaultScheduleEvent) event;
+			newEvent.setData(newAppt.getBizId());
+			eventModel.addEvent(newEvent);
 		} else {
 
 			eventModel.updateEvent(event);
 		}
+		event = new DefaultScheduleEvent<>();
 	}
 
 	public void onDateSelect(SelectEvent<LocalDateTime> selectEvent) {
@@ -145,11 +144,12 @@ public class ScheduleView extends FacesView<modules.appointment.domain.Appointme
 		event = selectEvent.getObject();
 	}
 
-	public void onEventMove(ScheduleEntryMoveEvent event) {
-		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Event moved",
-				"Delta:" + event.getDeltaAsDuration());
+	public void onEventMove(ScheduleEntryMoveEvent moveEvent) {
+		Util.LOGGER.info(String.format("Event %s moved by days %s %s", moveEvent.getScheduleEvent().getId(),
+				Integer.valueOf(moveEvent.getDayDelta()), moveEvent.getScheduleEvent().getStartDate()));
 
-		addMessage(message);
+		final String apptBizId = (String) moveEvent.getScheduleEvent().getData();
+		appointmentService.updateAppointmentDate(apptBizId, moveEvent.getDayDelta());
 	}
 
 	public void onEventResize(ScheduleEntryResizeEvent event) {

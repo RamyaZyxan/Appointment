@@ -22,6 +22,9 @@
 		<property name="bizUserId" length="36" index="IDX_bizUserId" not-null="true" />
 		<property name="title" length="100" />
 		<property name="appointmentDate" type="DateOnly" />
+		<property name="startTime" length="50" />
+		<property name="endTime" length="50" />
+		<property name="appointmentTime" length="50" />
 		<property name="branch" length="10">
 			<type name="Enum">
 				<param name="enumClass">modules.appointment.domain.Appointment$Branch</param>

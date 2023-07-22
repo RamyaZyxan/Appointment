@@ -17,6 +17,18 @@
 			<displayName>Appointment Date</displayName>
 			<defaultValue>{DATE}</defaultValue>
 		</date>
+		<text name="startTime">
+			<displayName>Start Time</displayName>
+			<length>50</length>
+		</text>
+		<text name="endTime">
+			<displayName>End Time</displayName>
+			<length>50</length>
+		</text>
+		<text name="appointmentTime">
+			<displayName>Appointment Time</displayName>
+			<length>50</length>
+		</text>
 		<enum name="branch">
 			<displayName>Branch</displayName>
 			<values>

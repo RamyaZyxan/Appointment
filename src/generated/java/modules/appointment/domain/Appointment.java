@@ -51,6 +51,15 @@ public class Appointment extends AbstractPersistentBean {
 	public static final String appointmentDatePropertyName = "appointmentDate";
 
 	/** @hidden */
+	public static final String startTimePropertyName = "startTime";
+
+	/** @hidden */
+	public static final String endTimePropertyName = "endTime";
+
+	/** @hidden */
+	public static final String appointmentTimePropertyName = "appointmentTime";
+
+	/** @hidden */
 	public static final String branchPropertyName = "branch";
 
 	/** @hidden */
@@ -386,6 +395,21 @@ public class Appointment extends AbstractPersistentBean {
 	private DateOnly appointmentDate = (DateOnly) ExpressionEvaluator.evaluate("{DATE}", this);
 
 	/**
+	 * Start Time
+	 **/
+	private String startTime;
+
+	/**
+	 * End Time
+	 **/
+	private String endTime;
+
+	/**
+	 * Appointment Time
+	 **/
+	private String appointmentTime;
+
+	/**
 	 * Branch
 	 **/
 	private Branch branch;
@@ -487,6 +511,60 @@ public class Appointment extends AbstractPersistentBean {
 	public void setAppointmentDate(DateOnly appointmentDate) {
 		preset(appointmentDatePropertyName, appointmentDate);
 		this.appointmentDate = appointmentDate;
+	}
+
+	/**
+	 * {@link #startTime} accessor.
+	 * @return	The value.
+	 **/
+	public String getStartTime() {
+		return startTime;
+	}
+
+	/**
+	 * {@link #startTime} mutator.
+	 * @param startTime	The new value.
+	 **/
+	@XmlElement
+	public void setStartTime(String startTime) {
+		preset(startTimePropertyName, startTime);
+		this.startTime = startTime;
+	}
+
+	/**
+	 * {@link #endTime} accessor.
+	 * @return	The value.
+	 **/
+	public String getEndTime() {
+		return endTime;
+	}
+
+	/**
+	 * {@link #endTime} mutator.
+	 * @param endTime	The new value.
+	 **/
+	@XmlElement
+	public void setEndTime(String endTime) {
+		preset(endTimePropertyName, endTime);
+		this.endTime = endTime;
+	}
+
+	/**
+	 * {@link #appointmentTime} accessor.
+	 * @return	The value.
+	 **/
+	public String getAppointmentTime() {
+		return appointmentTime;
+	}
+
+	/**
+	 * {@link #appointmentTime} mutator.
+	 * @param appointmentTime	The new value.
+	 **/
+	@XmlElement
+	public void setAppointmentTime(String appointmentTime) {
+		preset(appointmentTimePropertyName, appointmentTime);
+		this.appointmentTime = appointmentTime;
 	}
 
 	/**
