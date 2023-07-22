@@ -39,6 +39,8 @@ public class AppointmentService {
 		appt.setAppointmentDate(apptDate);
 		appt.setTitle(title);	
 		appt.setAppointmentTime(startDate.toLocalTime().toString()+"-"+endDate.toLocalTime().toString());
+		appt.setStartTime(startDate.toString());
+		appt.setEndTime(endDate.toString());
 		appt.setStatus(appt.getStatus());
 
 		return CORE.getPersistence().save(appt);
